@@ -1,5 +1,6 @@
 from logic.database import connect_to_db
 
+
 class Equipes:
     def __init__(self):
         self.connection = connect_to_db()
@@ -19,8 +20,7 @@ class Equipes:
         try:
             cursor = self.connection.cursor()
             cursor.execute(
-                "INSERT INTO equipes (nom, pays) VALUES (%s, %s)",
-                (nom, pays)
+                "INSERT INTO equipes (nom, pays) VALUES (%s, %s)", (nom, pays)
             )
             self.connection.commit()
         except Exception as e:
@@ -41,7 +41,7 @@ class Equipes:
             cursor = self.connection.cursor()
             cursor.execute(
                 "UPDATE equipes SET nom = %s, pays = %s WHERE id = %s",
-                (nom, pays, equipe_id)
+                (nom, pays, equipe_id),
             )
             self.connection.commit()
         except Exception as e:

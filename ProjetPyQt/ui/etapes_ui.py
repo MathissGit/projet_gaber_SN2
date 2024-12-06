@@ -1,21 +1,33 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QMessageBox, QLineEdit, QLabel
+from PyQt5.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QTableWidget,
+    QTableWidgetItem,
+    QPushButton,
+    QMessageBox,
+    QLineEdit,
+    QLabel,
+)
 from logic.etapes import Etapes
 
+
 class EtapesUI(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, menu_window, parent=None):
         super().__init__(parent)
+        self.menu_window = menu_window  # Référence au menu principal
         self.etapes_logic = Etapes()
         self.setWindowTitle("Gestion des Étapes")
         self.init_ui()
 
     def init_ui(self):
-        layout = QVBoxLayout()
+        self.layout = QVBoxLayout()
 
         # Table pour afficher les étapes
         self.table = QTableWidget()
         self.table.setColumnCount(4)
         self.table.setHorizontalHeaderLabels(["Numéro", "Nom", "Distance", "Date"])
-        layout.addWidget(self.table)
+        self.layout.addWidget(self.table)
 
         # Formulaire pour ajouter ou modifier une étape
         form_layout = QHBoxLayout()
@@ -31,7 +43,7 @@ class EtapesUI(QWidget):
         form_layout.addWidget(self.distance_input)
         form_layout.addWidget(QLabel("Date:"))
         form_layout.addWidget(self.date_input)
-        layout.addLayout(form_layout)
+        self.layout.addLayout(form_layout)
 
         # Boutons
         button_layout = QHBoxLayout()
@@ -44,9 +56,15 @@ class EtapesUI(QWidget):
         button_layout.addWidget(self.add_button)
         button_layout.addWidget(self.update_button)
         button_layout.addWidget(self.delete_button)
-        layout.addLayout(button_layout)
 
-        self.setLayout(layout)
+        # Bouton Retour
+        self.back_button = QPushButton("Retour")
+        self.back_button.clicked.connect(self.return_to_menu)
+        button_layout.addWidget(self.back_button)
+
+        self.layout.addLayout(button_layout)
+
+        self.setLayout(self.layout)
         self.load_etapes()
 
     def load_etapes(self):
@@ -54,10 +72,10 @@ class EtapesUI(QWidget):
         etapes = self.etapes_logic.get_all_etapes()
         self.table.setRowCount(len(etapes))
         for row, etape in enumerate(etapes):
-            self.table.setItem(row, 0, QTableWidgetItem(str(etape['numero'])))
-            self.table.setItem(row, 1, QTableWidgetItem(etape['nom']))
-            self.table.setItem(row, 2, QTableWidgetItem(str(etape['distance'])))
-            self.table.setItem(row, 3, QTableWidgetItem(etape['date']))
+            self.table.setItem(row, 0, QTableWidgetItem(str(etape["numero"])))
+            self.table.setItem(row, 1, QTableWidgetItem(etape["nom"]))
+            self.table.setItem(row, 2, QTableWidgetItem(str(etape["distance"])))
+            self.table.setItem(row, 3, QTableWidgetItem(etape["date"]))
 
     def add_etape(self):
         """Ajoute une nouvelle étape."""
@@ -96,3 +114,8 @@ class EtapesUI(QWidget):
         numero = int(self.table.item(selected_row, 0).text())
         self.etapes_logic.delete_etape(numero)
         self.load_etapes()
+
+    def return_to_menu(self):
+        """Retourne au menu principal."""
+        self.hide()
+        self.menu_window.show()

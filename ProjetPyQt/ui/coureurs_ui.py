@@ -1,12 +1,22 @@
 from PyQt5.QtWidgets import (
-    QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem, 
-    QHBoxLayout, QMessageBox, QLineEdit, QLabel, QFormLayout
+    QWidget,
+    QVBoxLayout,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QHBoxLayout,
+    QMessageBox,
+    QLineEdit,
+    QLabel,
+    QFormLayout,
 )
 from logic.coureurs import Coureurs
 
+
 class CoureursUI(QWidget):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, menu_window, parent=None):
+        super().__init__(parent)
+        self.menu_window = menu_window  # Référence au menu principal
         self.setWindowTitle("Gestion des Coureurs")
         self.resize(600, 400)
 
@@ -14,13 +24,13 @@ class CoureursUI(QWidget):
         self.coureurs_logic = Coureurs()
 
         # Mise en page principale
-        layout = QVBoxLayout()
+        self.layout = QVBoxLayout()
 
         # Tableau des coureurs
         self.table = QTableWidget()
         self.table.setColumnCount(4)
         self.table.setHorizontalHeaderLabels(["ID", "Nom", "Pays", "Date de naissance"])
-        layout.addWidget(self.table)
+        self.layout.addWidget(self.table)
 
         # Boutons
         buttons_layout = QHBoxLayout()
@@ -41,12 +51,13 @@ class CoureursUI(QWidget):
         self.delete_button.clicked.connect(self.delete_coureur)
         buttons_layout.addWidget(self.delete_button)
 
+        # Bouton Retour
         self.back_button = QPushButton("Retour")
-        self.back_button.clicked.connect(self.close)
+        self.back_button.clicked.connect(self.return_to_menu)
         buttons_layout.addWidget(self.back_button)
 
-        layout.addLayout(buttons_layout)
-        self.setLayout(layout)
+        self.layout.addLayout(buttons_layout)
+        self.setLayout(self.layout)
 
         # Charger les coureurs au démarrage
         self.load_coureurs()
@@ -70,7 +81,9 @@ class CoureursUI(QWidget):
         """Affiche un formulaire pour modifier un coureur sélectionné."""
         selected_row = self.table.currentRow()
         if selected_row == -1:
-            QMessageBox.warning(self, "Erreur", "Veuillez sélectionner un coureur à modifier.")
+            QMessageBox.warning(
+                self, "Erreur", "Veuillez sélectionner un coureur à modifier."
+            )
             return
 
         coureur_id = int(self.table.item(selected_row, 0).text())
@@ -79,7 +92,9 @@ class CoureursUI(QWidget):
     def show_coureur_form(self, mode, coureur_id=None):
         """Affiche un formulaire pour ajouter ou modifier un coureur."""
         form = QWidget()
-        form.setWindowTitle("Ajouter un coureur" if mode == "add" else "Modifier un coureur")
+        form.setWindowTitle(
+            "Ajouter un coureur" if mode == "add" else "Modifier un coureur"
+        )
         layout = QFormLayout()
 
         nom_input = QLineEdit()
@@ -101,7 +116,9 @@ class CoureursUI(QWidget):
             if mode == "add":
                 self.coureurs_logic.add_coureur(nom, pays, date_naissance)
             elif mode == "update":
-                self.coureurs_logic.update_coureur(coureur_id, nom, pays, date_naissance)
+                self.coureurs_logic.update_coureur(
+                    coureur_id, nom, pays, date_naissance
+                )
 
             self.load_coureurs()
             form.close()
@@ -121,9 +138,16 @@ class CoureursUI(QWidget):
         """Supprime le coureur sélectionné."""
         selected_row = self.table.currentRow()
         if selected_row == -1:
-            QMessageBox.warning(self, "Erreur", "Veuillez sélectionner un coureur à supprimer.")
+            QMessageBox.warning(
+                self, "Erreur", "Veuillez sélectionner un coureur à supprimer."
+            )
             return
 
         coureur_id = int(self.table.item(selected_row, 0).text())
         self.coureurs_logic.delete_coureur(coureur_id)
         self.load_coureurs()
+
+    def return_to_menu(self):
+        """Retourne au menu principal."""
+        self.hide()
+        self.menu_window.show()

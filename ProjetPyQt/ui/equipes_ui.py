@@ -1,21 +1,33 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QMessageBox, QLineEdit, QLabel
+from PyQt5.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QTableWidget,
+    QTableWidgetItem,
+    QPushButton,
+    QMessageBox,
+    QLineEdit,
+    QLabel,
+)
 from logic.equipes import Equipes
 
+
 class EquipesUI(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, menu_window, parent=None):
         super().__init__(parent)
+        self.menu_window = menu_window  # Référence au menu principal
         self.equipes_logic = Equipes()
         self.setWindowTitle("Gestion des Équipes")
         self.init_ui()
 
     def init_ui(self):
-        layout = QVBoxLayout()
+        self.layout = QVBoxLayout()
 
         # Table pour afficher les équipes
         self.table = QTableWidget()
         self.table.setColumnCount(3)
         self.table.setHorizontalHeaderLabels(["ID", "Nom", "Pays"])
-        layout.addWidget(self.table)
+        self.layout.addWidget(self.table)
 
         # Formulaire pour ajouter ou modifier une équipe
         form_layout = QHBoxLayout()
@@ -25,7 +37,7 @@ class EquipesUI(QWidget):
         form_layout.addWidget(self.nom_input)
         form_layout.addWidget(QLabel("Pays:"))
         form_layout.addWidget(self.pays_input)
-        layout.addLayout(form_layout)
+        self.layout.addLayout(form_layout)
 
         # Boutons
         button_layout = QHBoxLayout()
@@ -35,12 +47,19 @@ class EquipesUI(QWidget):
         self.update_button.clicked.connect(self.update_equipe)
         self.delete_button = QPushButton("Supprimer")
         self.delete_button.clicked.connect(self.delete_equipe)
+        
+        # Bouton Retour
+        self.back_button = QPushButton("Retour")
+        self.back_button.clicked.connect(self.return_to_menu)
+
         button_layout.addWidget(self.add_button)
         button_layout.addWidget(self.update_button)
         button_layout.addWidget(self.delete_button)
-        layout.addLayout(button_layout)
+        button_layout.addWidget(self.back_button)
 
-        self.setLayout(layout)
+        self.layout.addLayout(button_layout)
+
+        self.setLayout(self.layout)
         self.load_equipes()
 
     def load_equipes(self):
@@ -48,9 +67,9 @@ class EquipesUI(QWidget):
         equipes = self.equipes_logic.get_all_equipes()
         self.table.setRowCount(len(equipes))
         for row, equipe in enumerate(equipes):
-            self.table.setItem(row, 0, QTableWidgetItem(str(equipe['id'])))
-            self.table.setItem(row, 1, QTableWidgetItem(equipe['nom']))
-            self.table.setItem(row, 2, QTableWidgetItem(equipe['pays']))
+            self.table.setItem(row, 0, QTableWidgetItem(str(equipe["id"])))
+            self.table.setItem(row, 1, QTableWidgetItem(equipe["nom"]))
+            self.table.setItem(row, 2, QTableWidgetItem(equipe["pays"]))
 
     def add_equipe(self):
         """Ajoute une nouvelle équipe."""
@@ -86,3 +105,8 @@ class EquipesUI(QWidget):
         equipe_id = int(self.table.item(selected_row, 0).text())
         self.equipes_logic.delete_equipe(equipe_id)
         self.load_equipes()
+
+    def return_to_menu(self):
+        """Retourne au menu principal."""
+        self.hide()
+        self.menu_window.show()
