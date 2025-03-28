@@ -1,0 +1,122 @@
+/* Style général */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header */
+header {
+    /* background-color: #FFD700; Jaune du Tour de France */
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+/* Conteneur principal */
+.container {
+    flex: 1; /* Permet au contenu de prendre tout l'espace disponible */
+    margin: 50px auto;
+    max-width: 800px;
+}
+
+/* Tableaux */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table, th, td {
+    border: 1px solid #333; /* Noir */
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #FFD700; /* Jaune */
+    color: black;
+}
+
+tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
+tr:hover {
+    background-color: #FFD700; /* Jaune */
+    color: black;
+}
+
+/* Footer */
+footer {
+    background-color: #333; /* Noir */
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    border: 5px solid #FFD700; /* Encadrement jaune */
+    border-radius: 10px;
+}
+
+/* Boutons stylisés */
+.buttons a {
+    display: inline-block;
+    margin: 10px;
+    padding: 15px 30px;
+    text-decoration: none;
+    color: black;
+    background-color:  #FFD700; /* Jaune */
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.buttons a:hover {
+    background-color: #333; /* Noir */
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Conteneur des boutons */
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Conteneur du header */
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Logo */
+.logo {
+    height: 50px; /* Ajustez la hauteur selon vos besoins */
+    width: auto;
+}
