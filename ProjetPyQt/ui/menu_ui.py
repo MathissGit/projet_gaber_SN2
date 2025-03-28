@@ -23,22 +23,25 @@ class MenuUI(QWidget):
         self.etapes_button.clicked.connect(self.open_etapes_ui)
 
     def open_coureurs_ui(self):
-        from ui.coureurs_ui import CoureursUI
-
-        self.coureurs_ui = CoureursUI(self)  # Passe la référence du menu
-        self.coureurs_ui.show()
-        self.hide()  # Fermer le menu principal
+        print("Ouverture de la fenêtre des coureurs...")  # Debug
+        try:
+            from ui.coureurs_ui import CoureursUI
+            self.coureurs_ui = CoureursUI(self)
+            self.coureurs_ui.show()
+            self.hide()  # Fermer le menu principal
+        except Exception as e:
+            print(f"Erreur lors de l'ouverture de la fenêtre Coureurs: {e}")
 
     def open_equipes_ui(self):
+        print("Ouverture de la fenêtre des équipes...")  # Debug
         from ui.equipes_ui import EquipesUI
-
-        self.equipes_ui = EquipesUI(self)  # Passe la référence du menu
+        self.equipes_ui = EquipesUI(self)
         self.equipes_ui.show()
-        self.hide()  # Fermer le menu principal
+        self.hide()
 
     def open_etapes_ui(self):
+        print("Ouverture de la fenêtre des étapes...")  # Debug
         from ui.etapes_ui import EtapesUI
-
-        self.etapes_ui = EtapesUI(self)  # Passe la référence du menu
+        self.etapes_ui = EtapesUI(self)
         self.etapes_ui.show()
-        self.hide()  # Fermer le menu principal
+        self.hide()

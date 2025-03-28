@@ -1,26 +1,29 @@
 from PyQt5.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QPushButton,
-    QTableWidget,
-    QTableWidgetItem,
-    QHBoxLayout,
-    QMessageBox,
-    QLineEdit,
-    QLabel,
-    QFormLayout,
+    QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem,
+    QHBoxLayout, QMessageBox, QLineEdit, QLabel, QFormLayout
 )
-from logic.coureurs import Coureurs
+
+try:
+    from logic.coureurs import Coureurs
+except ImportError as e:
+    print(f"Erreur d'importation de Coureurs: {e}")
+    Coureurs = None  # Éviter que le programme plante
 
 
 class CoureursUI(QWidget):
     def __init__(self, menu_window, parent=None):
         super().__init__(parent)
-        self.menu_window = menu_window  # Référence au menu principal
+        print("Fenêtre CoureursUI créée !")  # Debug
+        self.menu_window = menu_window
         self.setWindowTitle("Gestion des Coureurs")
         self.resize(600, 400)
 
-        # Initialisation de la logique
+        # Vérification si Coureurs est bien importé
+        if Coureurs is None:
+            QMessageBox.critical(self, "Erreur", "Impossible de charger la logique des coureurs.")
+            self.close()
+            return
+
         self.coureurs_logic = Coureurs()
 
         # Mise en page principale
@@ -34,7 +37,6 @@ class CoureursUI(QWidget):
 
         # Boutons
         buttons_layout = QHBoxLayout()
-
         self.load_button = QPushButton("Charger")
         self.load_button.clicked.connect(self.load_coureurs)
         buttons_layout.addWidget(self.load_button)
@@ -51,7 +53,6 @@ class CoureursUI(QWidget):
         self.delete_button.clicked.connect(self.delete_coureur)
         buttons_layout.addWidget(self.delete_button)
 
-        # Bouton Retour
         self.back_button = QPushButton("Retour")
         self.back_button.clicked.connect(self.return_to_menu)
         buttons_layout.addWidget(self.back_button)
@@ -64,7 +65,9 @@ class CoureursUI(QWidget):
 
     def load_coureurs(self):
         """Charge les coureurs dans le tableau."""
+        print("Chargement des coureurs...")  # Debug
         coureurs = self.coureurs_logic.get_all_coureurs()
+        print("Données reçues :", coureurs)  # Debug
         self.table.setRowCount(len(coureurs))
 
         for row_idx, coureur in enumerate(coureurs):
@@ -81,9 +84,7 @@ class CoureursUI(QWidget):
         """Affiche un formulaire pour modifier un coureur sélectionné."""
         selected_row = self.table.currentRow()
         if selected_row == -1:
-            QMessageBox.warning(
-                self, "Erreur", "Veuillez sélectionner un coureur à modifier."
-            )
+            QMessageBox.warning(self, "Erreur", "Veuillez sélectionner un coureur à modifier.")
             return
 
         coureur_id = int(self.table.item(selected_row, 0).text())
@@ -92,9 +93,7 @@ class CoureursUI(QWidget):
     def show_coureur_form(self, mode, coureur_id=None):
         """Affiche un formulaire pour ajouter ou modifier un coureur."""
         form = QWidget()
-        form.setWindowTitle(
-            "Ajouter un coureur" if mode == "add" else "Modifier un coureur"
-        )
+        form.setWindowTitle("Ajouter un coureur" if mode == "add" else "Modifier un coureur")
         layout = QFormLayout()
 
         nom_input = QLineEdit()
@@ -116,9 +115,7 @@ class CoureursUI(QWidget):
             if mode == "add":
                 self.coureurs_logic.add_coureur(nom, pays, date_naissance)
             elif mode == "update":
-                self.coureurs_logic.update_coureur(
-                    coureur_id, nom, pays, date_naissance
-                )
+                self.coureurs_logic.update_coureur(coureur_id, nom, pays, date_naissance)
 
             self.load_coureurs()
             form.close()
@@ -138,9 +135,7 @@ class CoureursUI(QWidget):
         """Supprime le coureur sélectionné."""
         selected_row = self.table.currentRow()
         if selected_row == -1:
-            QMessageBox.warning(
-                self, "Erreur", "Veuillez sélectionner un coureur à supprimer."
-            )
+            QMessageBox.warning(self, "Erreur", "Veuillez sélectionner un coureur à supprimer.")
             return
 
         coureur_id = int(self.table.item(selected_row, 0).text())
