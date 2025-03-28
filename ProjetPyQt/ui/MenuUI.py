@@ -25,7 +25,7 @@ class MenuUI(QWidget):
     def open_coureurs_ui(self):
         print("Ouverture de la fenêtre des coureurs...")  # Debug
         try:
-            from ui.coureurs_ui import CoureursUI
+            from projet_gaber_SN2.ProjetPyQt.ui.CoureursUI import CoureursUI
             self.coureurs_ui = CoureursUI(self)
             self.coureurs_ui.show()
             self.hide()  # Fermer le menu principal
@@ -34,14 +34,14 @@ class MenuUI(QWidget):
 
     def open_equipes_ui(self):
         print("Ouverture de la fenêtre des équipes...")  # Debug
-        from ui.equipes_ui import EquipesUI
+        from projet_gaber_SN2.ProjetPyQt.ui.EquipesUI import EquipesUI
         self.equipes_ui = EquipesUI(self)
         self.equipes_ui.show()
         self.hide()
 
     def open_etapes_ui(self):
         print("Ouverture de la fenêtre des étapes...")  # Debug
-        from ui.etapes_ui import EtapesUI
+        from projet_gaber_SN2.ProjetPyQt.ui.EtapesUI import EtapesUI
         self.etapes_ui = EtapesUI(self)
         self.etapes_ui.show()
         self.hide()
