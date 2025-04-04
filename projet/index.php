@@ -5,6 +5,7 @@ require_once 'controllers/EquipesController.php';
 require_once 'controllers/EtapesController.php';
 
 $page = $_GET['page'] ?? 'home';
+$action = $_GET['action'] ?? null;
 
 switch ($page) {
     case 'home':
@@ -12,15 +13,45 @@ switch ($page) {
         break;
     case 'coureurs':
         $controller = new CoureursController();
-        $controller->index();
+        if ($action === 'create') {
+            $controller->create();
+        } elseif ($action === 'delete') {
+            $controller->delete();
+        } elseif ($action === 'edit') {
+            $controller->edit();
+        } elseif ($action === 'update') {
+            $controller->update();
+        } else {
+            $controller->index();
+        }
         break;
     case 'equipes':
         $controller = new EquipesController();
-        $controller->index();
+        if ($action === 'create') {
+            $controller->create();
+        } elseif ($action === 'delete') {
+            $controller->delete();
+        } elseif ($action === 'edit') {
+            $controller->edit();
+        } elseif ($action === 'update') {
+            $controller->update();
+        } else {
+            $controller->index();
+        }
         break;
     case 'etapes':
         $controller = new EtapesController();
-        $controller->index();
+        if ($action === 'create') {
+            $controller->create();
+        } elseif ($action === 'delete') {
+            $controller->delete();
+        } elseif ($action === 'edit') {
+            $controller->edit();
+        } elseif ($action === 'update') {
+            $controller->update();
+        } else {
+            $controller->index();
+        }
         break;
     default:
         echo "Page non trouvée.";
